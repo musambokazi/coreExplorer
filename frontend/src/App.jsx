@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { coreExploreApi } from "./api/coreExploreApi";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import HomePage from "./components/home/HomePage";
 import AppLayout from "./components/layout/AppLayout";
@@ -6,21 +7,7 @@ import QuizPage from "./components/quiz/QuizPage";
 import ResultsPage from "./components/results/ResultsPage";
 import { quizModules, resultsMap } from "./data/coreExploreContent";
 
-const getApiBaseUrl = () => {
-  const configured = import.meta.env.VITE_API_URL;
-  if (configured) {
-    return configured;
-  }
-
-  const hostname = window.location.hostname;
-  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") {
-    return "http://localhost:5000";
-  }
-
-  return `http://${hostname}:5000`;
-};
-
-const API_BASE_URL = getApiBaseUrl();
+const DEMO_STUDENT_ID = 1;
 
 export default function App() {
   const [institutions, setInstitutions] = useState([]);
@@ -31,11 +18,12 @@ export default function App() {
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
   const [quizError, setQuizError] = useState("");
-  const [student, setStudent] = useState(null);
-  const [authMode, setAuthMode] = useState("login");
-  const [authForm, setAuthForm] = useState({ name: "", email: "", password: "" });
-  const [authMessage, setAuthMessage] = useState("");
-  const [dashboardResults, setDashboardResults] = useState([]);
+  const [pathwayLoading, setPathwayLoading] = useState(false);
+  const [pathwayError, setPathwayError] = useState("");
+  const [pathwaySuccess, setPathwaySuccess] = useState("");
+  const [savedPathways, setSavedPathways] = useState([]);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [dashboardError, setDashboardError] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [resources, setResources] = useState([]);
   const [subjectPath, setSubjectPath] = useState("people");
@@ -44,52 +32,20 @@ export default function App() {
   const [institutionProvince, setInstitutionProvince] = useState("");
 
   useEffect(() => {
-    const controller = new AbortController();
-    const query = new URLSearchParams();
-
-    if (institutionType !== "all") query.set("type", institutionType);
-    if (institutionProvince) query.set("province", institutionProvince);
-    if (institutionSearch) query.set("search", institutionSearch);
-
     setLoading(true);
-    fetch(`${API_BASE_URL}/api/institutions?${query.toString()}`, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Request failed with status ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setInstitutions(data);
-        setError("");
-      })
-      .catch((err) => {
-        if (err.name === "AbortError") {
-          return;
-        }
-        console.error("Error fetching institutions:", err);
-        setError("Unable to load institutions right now. Please make sure the backend is running.");
-      })
-      .finally(() => setLoading(false));
-
-    return () => controller.abort();
+    setInstitutions([]);
+    setError("Institution discovery will connect once the FastAPI institutions endpoint is available.");
+    setLoading(false);
   }, [institutionSearch, institutionType, institutionProvince]);
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`${API_BASE_URL}/api/subjects?path=${subjectPath}`, { signal: controller.signal })
-      .then((res) => res.json())
-      .then((data) => setSubjects(data))
-      .catch(() => setSubjects([]));
-
-    fetch(`${API_BASE_URL}/api/resources?path=${subjectPath}`, { signal: controller.signal })
-      .then((res) => res.json())
-      .then((data) => setResources(data))
-      .catch(() => setResources([]));
-
-    return () => controller.abort();
+    setSubjects([]);
+    setResources([]);
   }, [subjectPath]);
+
+  useEffect(() => {
+    loadSavedPathways();
+  }, []);
 
   const navigateTo = (section) => {
     setActiveSection(section);
@@ -100,32 +56,41 @@ export default function App() {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const refreshDashboardResults = async (studentId) => {
-    const response = await fetch(`${API_BASE_URL}/api/results/${studentId}`);
-    const data = await response.json();
-    setDashboardResults(data);
+  const loadSavedPathways = async () => {
+    setDashboardLoading(true);
+    setDashboardError("");
+
+    try {
+      const data = await coreExploreApi.listPathways(DEMO_STUDENT_ID);
+      setSavedPathways(data);
+    } catch (err) {
+      setDashboardError(err.message);
+    } finally {
+      setDashboardLoading(false);
+    }
   };
 
   const saveResultToBackend = async (recommendation) => {
-    if (!student) {
-      return;
-    }
+    setPathwayLoading(true);
+    setPathwayError("");
+    setPathwaySuccess("");
 
     try {
-      await fetch(`${API_BASE_URL}/api/results`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          student_id: student.id,
-          path: recommendation.title,
-          description: recommendation.description,
-          careers: recommendation.careers,
-        }),
+      await coreExploreApi.createPathway({
+        student_id: DEMO_STUDENT_ID,
+        title: recommendation.title,
+        description: recommendation.description,
+        pathway_type: "career",
+        status: "active",
+        recommendation_summary: recommendation.nextSteps.join(" "),
       });
 
-      await refreshDashboardResults(student.id);
+      setPathwaySuccess("Your pathway was saved to FastAPI successfully.");
+      await loadSavedPathways();
     } catch (err) {
-      console.error("Failed to save result:", err);
+      setPathwayError(`Your result is visible, but it could not be saved yet. ${err.message}`);
+    } finally {
+      setPathwayLoading(false);
     }
   };
 
@@ -153,46 +118,6 @@ export default function App() {
     setQuizError("");
     navigateTo("results");
     await saveResultToBackend(finalResult);
-  };
-
-  const handleAuthChange = (event) => {
-    const { name, value } = event.target;
-    setAuthForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAuthSubmit = async (event) => {
-    event.preventDefault();
-    setAuthMessage("");
-
-    const endpoint = authMode === "register" ? "/api/auth/register" : "/api/auth/login";
-    const body =
-      authMode === "register"
-        ? { name: authForm.name, email: authForm.email, password: authForm.password }
-        : { email: authForm.email, password: authForm.password };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Authentication failed.");
-      }
-
-      setStudent(data.student);
-      setAuthMessage(data.message);
-      setAuthForm({ name: "", email: "", password: "" });
-      navigateTo("dashboard");
-
-      if (data.student) {
-        await refreshDashboardResults(data.student.id);
-      }
-    } catch (err) {
-      setAuthMessage(err.message);
-    }
   };
 
   return (
@@ -229,17 +154,22 @@ export default function App() {
           onSubmit={handleQuizSubmit}
         />
       )}
-      {activeSection === "results" && <ResultsPage institutions={institutions} result={result} />}
+      {activeSection === "results" && (
+        <ResultsPage
+          institutions={institutions}
+          result={result}
+          saveError={pathwayError}
+          saveLoading={pathwayLoading}
+          saveSuccess={pathwaySuccess}
+        />
+      )}
       {activeSection === "dashboard" && (
         <DashboardPage
-          authForm={authForm}
-          authMessage={authMessage}
-          authMode={authMode}
-          dashboardResults={dashboardResults}
-          student={student}
-          onAuthChange={handleAuthChange}
-          onAuthSubmit={handleAuthSubmit}
-          onToggleAuthMode={() => setAuthMode(authMode === "login" ? "register" : "login")}
+          error={dashboardError}
+          loading={dashboardLoading}
+          pathways={savedPathways}
+          studentId={DEMO_STUDENT_ID}
+          onRefresh={loadSavedPathways}
         />
       )}
     </AppLayout>

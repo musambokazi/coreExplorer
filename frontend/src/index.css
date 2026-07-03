@@ -280,6 +280,23 @@ select {
   gap: 1rem;
 }
 
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-header h2 {
+  margin-bottom: 0.35rem;
+}
+
+.compact-action {
+  width: auto;
+  white-space: nowrap;
+}
+
 .auth-card {
   display: grid;
   gap: 0.9rem;
@@ -394,5 +411,12 @@ select {
     width: 100%;
     text-align: center;
   }
-}
 
+  .dashboard-header {
+    display: grid;
+  }
+
+  .compact-action {
+    width: 100%;
+  }
+}

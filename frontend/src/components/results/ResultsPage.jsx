@@ -2,7 +2,7 @@ import InstitutionCard from "../institutions/InstitutionCard";
 import Panel from "../ui/Panel";
 import StatusText from "../ui/StatusText";
 
-export default function ResultsPage({ institutions, result }) {
+export default function ResultsPage({ institutions, result, saveError, saveLoading, saveSuccess }) {
   if (!result) {
     return (
       <Panel className="panel-wide">
@@ -17,6 +17,9 @@ export default function ResultsPage({ institutions, result }) {
   return (
     <Panel className="panel-wide results-panel">
       <h2>Your recommendation</h2>
+      {saveLoading && <StatusText>Saving your pathway to FastAPI...</StatusText>}
+      {saveSuccess && <StatusText>{saveSuccess}</StatusText>}
+      {saveError && <StatusText tone="error">{saveError}</StatusText>}
       <div className="results-card">
         <h3>{result.title}</h3>
         <p>{result.description}</p>
