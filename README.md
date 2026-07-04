@@ -1,54 +1,57 @@
-# CoreExplorer
+# CoreExplore
 
-CoreExplorer is a full-stack web app with a Flask backend and a React frontend. It helps students explore career paths by using quiz results, subjects, careers, institutions, and learning resources.
+CoreExplore is a full-stack web application designed to help students explore career paths. By leveraging a quiz-based assessment, it connects personal values and interests to specific subjects, careers, institutions, and learning resources.
 
-## Project structure
+This project features a sleek, Minimalist 60-30-10 design aesthetic on the frontend for optimal UI/UX.
 
-- backend/ — Flask app, SQLAlchemy models, and API routes
-- frontend/ — React app built with Vite
+## Project Structure
+
+- `backend/` — FastAPI application, SQLAlchemy models, SQLite database, and API endpoints.
+- `frontend/` — React frontend built with Vite and styled with Tailwind CSS v4.
 
 ## Prerequisites
 
-Make sure you have the following installed:
+Ensure you have the following installed before starting:
+- **Python 3.8+** (for the backend)
+- **Node.js (v18+)** and **npm** (for the frontend)
 
-- Python 3
-- Node.js and npm
-- PostgreSQL (for the default database configuration)
+## Quick Start
 
-## Backend setup
+### 1. Backend Setup (FastAPI & SQLite)
 
-1. Open the project folder:
+The backend uses FastAPI and an SQLite database (`coreexplore.db`).
+
+1. Navigate to the backend directory:
    ```bash
-   cd /home/m_h_t-musa/Documents/personal_github/coreExplorer
+   cd backend
    ```
 2. Create and activate a Python virtual environment:
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
+   # Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+   
+   # macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
    ```
-3. Install backend dependencies:
+3. Install dependencies:
    ```bash
-   pip install -r backend/requirements.txt
+   pip install -r requirements.txt
    ```
-4. Make sure PostgreSQL is running and that a database named coreexplore exists, or set a different database URL:
+4. Start the FastAPI server (it runs on port 8000 by default):
    ```bash
-   export DATABASE_URL="postgresql://postgres:password@localhost/coreexplore"
+   uvicorn fastapi_app.main:app --reload
    ```
-5. Start the Flask backend:
-   ```bash
-   cd backend
-   python app.py
-   ```
-6. The backend will run at:
-   ```text
-   http://127.0.0.1:5000
-   ```
+   *The API will be available at `http://127.0.0.1:8000`*
 
-## Frontend setup
+### 2. Frontend Setup (React & Vite)
 
-1. Open the frontend folder:
+The frontend is a modern React application utilizing Tailwind CSS v4.
+
+1. Open a new terminal and navigate to the frontend directory:
    ```bash
-   cd /home/m_h_t-musa/Documents/personal_github/coreExplorer/frontend
+   cd frontend
    ```
 2. Install frontend dependencies:
    ```bash
@@ -58,58 +61,31 @@ Make sure you have the following installed:
    ```bash
    npm run dev
    ```
-4. The frontend will usually be available at:
-   ```text
-   http://localhost:5173
-   ```
+   *The frontend will be available at `http://localhost:3000` (or the next available port like 3001 if 3000 is occupied).*
 
-## API endpoints
+## API Endpoints
 
-The backend currently exposes these routes:
+The FastAPI backend exposes the following primary routes (see `http://127.0.0.1:8000/docs` for the interactive Swagger UI):
+- `GET /api/institutions`
+- `GET /api/questions`
 
-- GET /api/institutions
-- GET /api/questions
+## Design System
 
-## Run both servers together
-
-Open two terminals.
-
-### Terminal 1: backend
-```bash
-cd /home/m_h_t-musa/Documents/personal_github/coreExplorer
-source .venv/bin/activate
-cd backend
-python app.py
-```
-
-### Terminal 2: frontend
-```bash
-cd /home/m_h_t-musa/Documents/personal_github/coreExplorer/frontend
-npm install
-npm run dev
-```
-
-Once both are running, open the frontend URL shown by Vite and make sure the backend is reachable at http://127.0.0.1:5000.
+The frontend strictly adheres to a **Minimalist 60-30-10** design system:
+- **60% Dominant:** Clean white (`#FFFFFF`) and off-white backgrounds with generous whitespace.
+- **30% Secondary:** Slate gray text and crisp, thin structural borders.
+- **10% Accent:** Electric Blue (`#2563EB`) utilized exclusively for primary actions, links, and highlights.
 
 ## Troubleshooting
 
-### Backend fails to start
-- Check that PostgreSQL is running.
-- Make sure the database URL is correct.
-- Verify that the Python dependencies were installed successfully.
+### Backend Fails to Start
+- Ensure the virtual environment is activated.
+- Verify `requirements.txt` dependencies are correctly installed.
 
-### Frontend cannot reach the backend
-- Make sure the backend is still running.
-- Confirm the frontend is calling the correct backend address.
-- If needed, update the fetch URL in the frontend code to match your local backend host.
+### Frontend Cannot Reach Backend
+- Ensure the backend is actively running on port 8000 in a separate terminal.
+- Check the console for CORS errors (CORS is enabled in `fastapi_app/main.py`).
 
-### Port already in use
-- If port 5000 is busy, stop the old Flask process or change the port.
-- If port 5173 is busy, Vite will usually suggest another port.
-
-## Development notes
-
-- The frontend talks to the backend using fetch requests.
-- The backend uses Flask, SQLAlchemy, and PostgreSQL.
-- If you change the database connection string, make sure the new value is available to the backend process.
-- The project is still growing, so keeping the backend logic organized and the frontend components small will make future development much easier.
+### Port Already in Use
+- If `npm run dev` fails due to port 3000 being in use, close old terminal sessions or let Vite automatically assign `3001`.
+- For the backend, you can specify a different port using `--port 8001` if necessary.
