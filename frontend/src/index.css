@@ -1,51 +1,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-neo-bg: #fdf5e6;
-  --color-neo-yellow: #ffde59;
-  --color-neo-pink: #ff66c4;
-  --color-neo-blue: #00d2ff;
-  --color-neo-green: #00bf63;
-  --color-neo-purple: #8c52ff;
-  --color-neo-black: #111111;
+  --color-min-canvas: #fafafa;
+  --color-min-surface: #ffffff;
+  --color-min-structure-light: #e2e8f0;
+  --color-min-structure-dark: #334155;
+  --color-min-text-main: #0f172a;
+  --color-min-text-muted: #64748b;
+  --color-min-accent: #2563eb;
+  --color-min-accent-hover: #1d4ed8;
 
-  --animate-bounce-hover: bounceHover 0.3s ease-in-out;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
   
-  @keyframes bounceHover {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(5px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 }
 
 @layer base {
   body {
-    @apply bg-neo-bg text-neo-black min-h-screen font-sans antialiased selection:bg-neo-yellow selection:text-neo-black;
+    @apply bg-min-canvas text-min-text-main min-h-screen font-sans antialiased selection:bg-min-accent/20;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight text-min-text-main font-semibold;
   }
 }
 
 @layer utilities {
-  .neo-card {
-    @apply bg-white border-4 border-neo-black shadow-[6px_6px_0px_rgba(17,17,17,1)] transition-transform;
+  .min-card {
+    @apply bg-min-surface border border-min-structure-light rounded-xl;
+  }
+
+  .min-btn-primary {
+    @apply bg-min-accent text-white px-6 py-2.5 rounded-lg font-medium transition-colors hover:bg-min-accent-hover flex items-center justify-center gap-2;
+  }
+
+  .min-btn-secondary {
+    @apply bg-white text-min-text-main border border-min-structure-light px-6 py-2.5 rounded-lg font-medium transition-colors hover:bg-min-structure-light/50 flex items-center justify-center gap-2;
   }
   
-  .neo-card-hover {
-    @apply hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[10px_10px_0px_rgba(17,17,17,1)];
-  }
-
-  .neo-btn {
-    @apply font-black text-lg px-6 py-3 border-4 border-neo-black shadow-[4px_4px_0px_rgba(17,17,17,1)] transition-all active:translate-x-1 active:translate-y-1 active:shadow-none;
-  }
-
-  .neo-btn-primary {
-    @apply bg-neo-yellow hover:bg-[#ffeb8a] text-neo-black;
-  }
-
-  .neo-btn-secondary {
-    @apply bg-neo-blue hover:bg-[#66e4ff] text-neo-black;
-  }
-  
-  .neo-btn-tertiary {
-    @apply bg-neo-pink hover:bg-[#ff99d8] text-neo-black;
+  .min-input {
+    @apply w-full bg-white border border-min-structure-light rounded-lg px-4 py-2.5 text-min-text-main outline-none focus:border-min-accent focus:ring-1 focus:ring-min-accent transition-shadow;
   }
 }

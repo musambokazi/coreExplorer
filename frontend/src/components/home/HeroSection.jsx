@@ -1,48 +1,44 @@
-import { ArrowRight, Compass, Sparkles } from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 
 export default function HeroSection({ onStartQuiz, onViewInstitutions }) {
   return (
-    <header className="relative text-center space-y-10 py-16 md:py-24">
+    <header className="relative text-center space-y-8 py-12 md:py-20 animate-fade-in">
       {/* Top Badge */}
-      <div className="inline-flex items-center gap-3 bg-white border-4 border-neo-black shadow-[4px_4px_0px_rgba(17,17,17,1)] px-5 py-2 mx-auto">
-        <span className="w-3 h-3 bg-neo-pink border-2 border-neo-black animate-bounce"></span>
-        <span className="font-black text-sm tracking-widest uppercase">For South African learners</span>
+      <div className="inline-flex items-center gap-2 text-xs font-medium text-min-text-muted bg-white border border-min-structure-light px-3 py-1 rounded-full">
+        <span className="w-1.5 h-1.5 rounded-full bg-min-accent"></span>
+        Career discovery for South African learners
       </div>
 
       {/* Main Heading */}
-      <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.95] max-w-5xl mx-auto uppercase text-neo-black" style={{textShadow: "6px 6px 0 #00d2ff"}}>
-        Find your future path with clarity
+      <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-min-text-main max-w-4xl mx-auto leading-[1.1]">
+        Find your future path with absolute clarity.
       </h1>
 
       {/* Subtitle */}
-      <p className="text-xl md:text-2xl text-neo-black max-w-3xl mx-auto leading-relaxed font-bold bg-white p-6 border-4 border-neo-black shadow-[8px_8px_0px_rgba(17,17,17,1)] rotate-1">
-        CoreExplore helps students connect their values, subjects, and interests to careers,
-        institutions, and learning resources in one guided experience.
+      <p className="text-lg md:text-xl text-min-text-muted max-w-2xl mx-auto leading-relaxed font-normal">
+        Connect your values, subjects, and interests to careers, institutions, and learning resources in one seamless experience.
       </p>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row justify-center gap-6 pt-8">
-        <button className="neo-btn neo-btn-primary flex items-center justify-center gap-3 text-xl hover:rotate-2" onClick={onStartQuiz}>
-          <Sparkles className="w-6 h-6 stroke-[3]" />
-          TAKE THE QUIZ
-          <ArrowRight className="w-6 h-6 stroke-[3]" />
+      <div className="flex flex-col sm:flex-row justify-center gap-4 pt-6">
+        <button className="min-btn-primary" onClick={onStartQuiz}>
+          Take the assessment
+          <ArrowRight className="w-4 h-4" />
         </button>
-        <button className="neo-btn neo-btn-tertiary flex items-center justify-center gap-3 text-xl hover:-rotate-2" onClick={onViewInstitutions}>
-          <Compass className="w-6 h-6 stroke-[3]" />
-          VIEW INSTITUTIONS
+        <button className="min-btn-secondary" onClick={onViewInstitutions}>
+          <Compass className="w-4 h-4 text-min-text-muted" />
+          Explore institutions
         </button>
       </div>
 
       {/* Features */}
-      <div className="flex flex-wrap justify-center gap-4 pt-12" aria-label="CoreExplore features">
-        {["Values quiz", "Career matching", "Institution discovery"].map((feature, i) => {
-          const colors = ['bg-neo-yellow', 'bg-neo-blue', 'bg-neo-green'];
-          return (
-            <span key={feature} className={`px-6 py-2 ${colors[i]} border-4 border-neo-black shadow-[4px_4px_0px_rgba(17,17,17,1)] text-lg font-black uppercase transform ${i%2===0?'rotate-2':'-rotate-1'}`}>
-              {feature}
-            </span>
-          )
-        })}
+      <div className="flex flex-wrap justify-center gap-6 pt-16 border-t border-min-structure-light mt-16 max-w-2xl mx-auto">
+        {["Values assessment", "Career mapping", "Institution discovery"].map((feature) => (
+          <span key={feature} className="text-sm font-medium text-min-text-muted flex items-center gap-2">
+            <span className="w-1 h-1 bg-min-structure-light rounded-full"></span>
+            {feature}
+          </span>
+        ))}
       </div>
     </header>
   );
