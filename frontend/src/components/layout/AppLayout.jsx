@@ -20,13 +20,8 @@ export default function AppLayout({
       <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-min-structure-light">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center gap-2">
-              <Box className="w-5 h-5 text-min-accent" strokeWidth={2.5} />
-              <span className="font-semibold text-lg tracking-tight text-min-text-main">
-                CoreExplore
-              </span>
-            </div>
+            {/* Logo placeholder */}
+            <div className="flex items-center gap-2"></div>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6">
