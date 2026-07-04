@@ -25,7 +25,7 @@ export default function InstitutionExplorer({
                 value={institutionSearch}
                 onChange={(event) => onSearchChange(event.target.value)}
                 placeholder="e.g. University of Cape Town"
-                className="min-input pl-9"
+                className="min-input !pl-10"
               />
             </div>
           </label>
@@ -37,7 +37,7 @@ export default function InstitutionExplorer({
               <select 
                 value={institutionType} 
                 onChange={(event) => onTypeChange(event.target.value)}
-                className="min-input pl-9 appearance-none bg-white"
+                className="min-input !pl-10 appearance-none bg-white"
               >
                 <option value="all">All Types</option>
                 <option value="school">School</option>
@@ -55,7 +55,7 @@ export default function InstitutionExplorer({
                 value={institutionProvince}
                 onChange={(event) => onProvinceChange(event.target.value)}
                 placeholder="e.g. Western Cape"
-                className="min-input pl-9"
+                className="min-input !pl-10"
               />
             </div>
           </label>
