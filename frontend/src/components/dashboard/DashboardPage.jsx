@@ -3,81 +3,93 @@ import StatusText from "../ui/StatusText";
 
 export default function DashboardPage({ error, loading, pathways, studentId, onRefresh }) {
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-6xl mx-auto space-y-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/50 backdrop-blur-md p-6 rounded-3xl border border-gray-200/60 shadow-sm">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 neo-card bg-neo-yellow p-8">
         <div>
-          <h2 className="text-3xl font-extrabold text-brand-deep">Student Dashboard</h2>
-          <p className="text-gray-500 font-medium mt-1">Viewing saved pathways for Learner #{studentId}</p>
+          <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter text-neo-black">Student Dashboard</h2>
+          <p className="text-xl font-bold mt-2 bg-white inline-block px-3 py-1 border-4 border-neo-black shadow-[2px_2px_0px_rgba(17,17,17,1)]">
+            Viewing saved pathways for Learner #{studentId}
+          </p>
         </div>
         <button 
           onClick={onRefresh}
           disabled={loading}
-          className="btn-secondary px-5 py-2.5 text-sm flex items-center gap-2"
+          className="neo-btn bg-white hover:bg-gray-100 flex items-center gap-3 text-xl disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          <RefreshCw className={`w-6 h-6 stroke-[3] ${loading ? 'animate-spin' : ''}`} />
+          REFRESH
         </button>
       </div>
 
       {/* States */}
       {loading && (
-        <div className="flex flex-col items-center justify-center p-12 text-gray-500 space-y-4">
-          <Loader2 className="w-8 h-8 animate-spin text-brand-indigo" />
-          <p className="font-medium text-sm">Loading your pathways...</p>
+        <div className="flex flex-col items-center justify-center p-16 space-y-6 neo-card bg-white">
+          <Loader2 className="w-12 h-12 animate-spin text-neo-black stroke-[3]" />
+          <p className="font-black text-2xl uppercase">Loading your pathways...</p>
         </div>
       )}
       
       {error && (
-        <div className="glass-panel p-6 rounded-2xl border-red-200 bg-red-50/50 flex flex-col items-center text-center">
+        <div className="neo-card bg-neo-pink p-8 text-center transform rotate-1">
           <StatusText tone="error">Unable to load saved pathways. {error}</StatusText>
         </div>
       )}
 
       {/* Pathways Grid */}
       {!loading && !error && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-2 text-brand-deep font-bold text-xl px-2">
-            <BookMarked className="w-6 h-6 text-brand-indigo" />
+        <div className="space-y-8">
+          <div className="flex items-center gap-4 text-neo-black font-black text-4xl uppercase px-2">
+            <BookMarked className="w-10 h-10 stroke-[3]" />
             Your Saved Pathways
           </div>
           
           {pathways.length === 0 ? (
-            <div className="glass-panel p-12 rounded-3xl text-center border-dashed border-2 border-gray-200">
-              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookMarked className="w-8 h-8 text-gray-400" />
+            <div className="neo-card bg-white p-16 text-center border-dashed border-8 border-neo-black">
+              <div className="w-24 h-24 bg-neo-yellow border-4 border-neo-black flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0px_rgba(17,17,17,1)] transform -rotate-3">
+                <BookMarked className="w-12 h-12 stroke-[3]" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">No pathways yet</h3>
-              <p className="text-gray-500 max-w-sm mx-auto">
+              <h3 className="text-3xl font-black uppercase mb-4">No pathways yet</h3>
+              <p className="text-xl font-bold max-w-md mx-auto">
                 Complete the discovery quiz to generate and save your first career pathway.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {pathways.map((pathway) => (
-                <div key={pathway.id} className="glass-panel p-8 rounded-3xl group hover:border-brand-indigo/30 transition-all cursor-default">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-green-50 text-green-600 border border-green-100">
-                      {pathway.status}
-                    </span>
-                    <button className="text-gray-400 hover:text-brand-indigo transition-colors" aria-label="View details">
-                      <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform" />
-                    </button>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-brand-deep mb-2">{pathway.title}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-6">{pathway.description}</p>
-                  
-                  {pathway.recommendation_summary && (
-                    <div className="p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
-                      <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Recommendation Summary</p>
-                      <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
-                        {pathway.recommendation_summary}
-                      </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {pathways.map((pathway, idx) => {
+                const colors = ['bg-neo-blue', 'bg-neo-pink', 'bg-neo-green', 'bg-neo-yellow'];
+                const cardColor = colors[idx % colors.length];
+                
+                return (
+                  <div key={pathway.id} className={`neo-card ${cardColor} p-8 flex flex-col neo-card-hover`}>
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="inline-flex items-center px-4 py-1 font-black text-sm uppercase bg-white border-4 border-neo-black shadow-[2px_2px_0px_rgba(17,17,17,1)]">
+                        {pathway.status}
+                      </span>
+                      <button className="bg-white p-2 border-4 border-neo-black shadow-[4px_4px_0px_rgba(17,17,17,1)] hover:bg-neo-black hover:text-white transition-colors" aria-label="View details">
+                        <ArrowRight className="w-6 h-6 stroke-[3] -rotate-45" />
+                      </button>
                     </div>
-                  )}
-                </div>
-              ))}
+                    
+                    <h3 className="text-3xl font-black uppercase mb-4 leading-tight bg-white p-3 border-4 border-neo-black shadow-[4px_4px_0px_rgba(17,17,17,1)] inline-block w-max max-w-full">
+                      {pathway.title}
+                    </h3>
+                    
+                    <p className="text-xl font-bold bg-white/90 p-4 border-4 border-neo-black mb-6 flex-1">
+                      {pathway.description}
+                    </p>
+                    
+                    {pathway.recommendation_summary && (
+                      <div className="p-5 bg-neo-black text-white border-4 border-neo-black mt-auto">
+                        <p className="text-xs font-black uppercase tracking-widest text-neo-yellow mb-3">Recommendation Summary</p>
+                        <p className="text-lg font-bold leading-snug line-clamp-3">
+                          {pathway.recommendation_summary}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           )}
         </div>
