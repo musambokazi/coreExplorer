@@ -1,0 +1,38 @@
+/* MentorCard.css */
+.mentor-card {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  max-width: 300px;
+  margin: 1rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mentor-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  object-fit: cover;
+}
+
+.mentor-name {
+  font-size: 1.25rem;
+  margin: 0.25rem 0;
+  color: hsl(260, 60%, 70%);
+}
+
+.mentor-title {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  color: hsl(260, 60%, 55%);
+}
+
+.mentor-bio {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #ddd;
+}

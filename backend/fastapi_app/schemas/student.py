@@ -13,6 +13,7 @@ class StudentOut(BaseModel):
     name: str
     email: EmailStr
     is_active: bool
+    is_premium: bool = False
     bio: Optional[str] = None
 
     class Config:

@@ -1,7 +1,12 @@
+// src/components/dashboard/DashboardPage.jsx
 import Panel from "../ui/Panel";
 import StatusText from "../ui/StatusText";
+import MentorCard from "../ui/MentorCard";
+import AnalyticsPanel from "../ui/AnalyticsPanel";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function DashboardPage({ error, loading, pathways, studentId, onRefresh }) {
+  const { user } = useAuth();
   return (
     <Panel className="panel-wide dashboard-panel">
       <div className="dashboard-header">
@@ -35,6 +40,14 @@ export default function DashboardPage({ error, loading, pathways, studentId, onR
             </div>
           )}
         </div>
+      )}
+
+      {/* Premium sections */}
+      {user?.is_premium && (
+        <>
+          <MentorCard />
+          <AnalyticsPanel />
+        </>
       )}
     </Panel>
   );

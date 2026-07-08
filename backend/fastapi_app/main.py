@@ -20,7 +20,10 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
+from fastapi_app.api.auth import router as auth_router
+
 app.include_router(pathways_router)
+app.include_router(auth_router)
 
 
 @app.get("/health")

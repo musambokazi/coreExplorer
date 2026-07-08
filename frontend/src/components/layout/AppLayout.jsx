@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import UpgradeModal from '../ui/UpgradeModal';
+
 const navItems = [
   { id: "home", label: "Home" },
   { id: "quiz", label: "Quiz" },
@@ -12,10 +15,11 @@ export default function AppLayout({
   onNavigate,
   onToggleMobileMenu,
 }) {
-  return (
+  const [showUpgrade, setShowUpgrade] = useState(false);
+return (
     <div className="app-shell">
       <nav className="top-nav" aria-label="Main navigation">
-        <div className="brand">CoreExplore</div>
+        <div className="brand" onClick={() => onNavigate('home')} style={{cursor: 'pointer'}}>CoreExplore</div>
         <button
           className="menu-toggle"
           onClick={onToggleMobileMenu}
@@ -35,8 +39,11 @@ export default function AppLayout({
               {item.label}
             </button>
           ))}
-        </div>
-      </nav>
+        <button onClick={() => setShowUpgrade(true)} className="primary-btn">
+  Premium
+</button>
+</div>
+      </nav>{showUpgrade && <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} />}
 
       <main className="page-shell">{children}</main>
 

@@ -32,8 +32,24 @@ const requestJson = async (path, options = {}) => {
 
   return data;
 };
-
 export const coreExploreApi = {
+  login(email, password) {
+    return requestJson('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+  },
+  register(name, email, password) {
+    return requestJson('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password }),
+    });
+  },
+  subscribe(studentId) {
+    return requestJson(`/api/auth/subscribe?student_id=${studentId}`, {
+      method: 'POST',
+    });
+  },
   createPathway(payload) {
     return requestJson("/api/pathways", {
       method: "POST",

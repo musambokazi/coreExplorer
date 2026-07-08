@@ -1,7 +1,12 @@
+import React from 'react';
 import Panel from "../ui/Panel";
 import StatusText from "../ui/StatusText";
 
 export default function QuizPage({ answers, error, modules, onAnswerChange, onSubmit }) {
+  if (!modules || modules.length === 0) {
+    console.warn('Quiz modules are empty');
+    return <p className="error-msg">Quiz data not available.</p>;
+  }
   return (
     <Panel className="panel-wide quiz-panel">
       <h2>Build your discovery profile</h2>

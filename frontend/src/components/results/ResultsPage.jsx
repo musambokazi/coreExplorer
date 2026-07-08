@@ -1,8 +1,14 @@
+// src/components/results/ResultsPage.jsx
 import InstitutionCard from "../institutions/InstitutionCard";
 import Panel from "../ui/Panel";
 import StatusText from "../ui/StatusText";
+import MentorCard from "../ui/MentorCard";
+import AnalyticsPanel from "../ui/AnalyticsPanel";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function ResultsPage({ institutions, result, saveError, saveLoading, saveSuccess }) {
+  const { user } = useAuth();
+
   if (!result) {
     return (
       <Panel className="panel-wide">
@@ -57,6 +63,14 @@ export default function ResultsPage({ institutions, result, saveError, saveLoadi
           <StatusText>Institutions will appear here once the backend data is available.</StatusText>
         )}
       </div>
+
+      {/* Premium sections */}
+      {user?.is_premium && (
+        <>
+          <MentorCard />
+          <AnalyticsPanel />
+        </>
+      )}
     </Panel>
   );
 }

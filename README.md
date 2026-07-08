@@ -6,8 +6,8 @@ This project features a sleek, Minimalist 60-30-10 design aesthetic on the front
 
 ## Project Structure
 
-- `backend/` — FastAPI application, SQLAlchemy models, SQLite database, and API endpoints.
-- `frontend/` — React frontend built with Vite and styled with Tailwind CSS v4.
+- `backend/` — FastAPI application (`fastapi_app`), SQLAlchemy models, SQLite database, and real authentication/pathway APIs.
+- `frontend/` — React frontend built with Vite and vanilla CSS.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ Ensure you have the following installed before starting:
 
 ### 1. Backend Setup (FastAPI & SQLite)
 
-The backend uses FastAPI and an SQLite database (`coreexplore.db`).
+The backend uses FastAPI and SQLite (`coreexplore.db`).
 
 1. Navigate to the backend directory:
    ```bash
@@ -47,7 +47,7 @@ The backend uses FastAPI and an SQLite database (`coreexplore.db`).
 
 ### 2. Frontend Setup (React & Vite)
 
-The frontend is a modern React application utilizing Tailwind CSS v4.
+The frontend is a modern React application utilizing Vite.
 
 1. Open a new terminal and navigate to the frontend directory:
    ```bash
@@ -57,17 +57,20 @@ The frontend is a modern React application utilizing Tailwind CSS v4.
    ```bash
    npm install
    ```
-3. Start the Vite development server:
+3. Start the dev server:
    ```bash
    npm run dev
    ```
-   *The frontend will be available at `http://localhost:3000` (or the next available port like 3001 if 3000 is occupied).*
+   *The frontend will be available at `http://localhost:3000` (or `3001` / `3002` if port 3000 is occupied).*
 
 ## API Endpoints
 
 The FastAPI backend exposes the following primary routes (see `http://127.0.0.1:8000/docs` for the interactive Swagger UI):
-- `GET /api/institutions`
-- `GET /api/questions`
+- `POST /api/auth/register` - Register a new student
+- `POST /api/auth/login` - Verify student email/password and log in
+- `POST /api/auth/subscribe` - Purchase premium subscription for a student
+- `POST /api/pathways` - Create and save student quiz/career pathways
+- `GET /api/pathways` - Retrieve saved pathways for a specific student
 
 ## Design System
 
@@ -87,5 +90,5 @@ The frontend strictly adheres to a **Minimalist 60-30-10** design system:
 - Check the console for CORS errors (CORS is enabled in `fastapi_app/main.py`).
 
 ### Port Already in Use
-- If `npm run dev` fails due to port 3000 being in use, close old terminal sessions or let Vite automatically assign `3001`.
+- If `npm run dev` fails due to port 3000 being in use, close old terminal sessions or let Vite automatically assign a new port.
 - For the backend, you can specify a different port using `--port 8001` if necessary.

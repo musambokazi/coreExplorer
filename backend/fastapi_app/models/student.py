@@ -10,5 +10,6 @@ class Student(Base):
     email = Column(String(150), unique=True, nullable=False, index=True)
     password_hash = Column(String(255), nullable=False)
     is_active = Column(Boolean, default=True)
+    is_premium = Column(Boolean, default=False)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     bio = Column(Text, nullable=True)
